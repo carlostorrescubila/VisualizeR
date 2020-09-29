@@ -1,11 +1,14 @@
 # #### > Read data #### ##########################################################################
 # 
 library(readr)
+
+library(rjson)
+library(RCurl)
 # 
 # #### > Data treatment ##########################################################################
 # 
 library(dplyr)
-# library(purrr)
+library(purrr)
 # library(forcats)
 library(stringr)
 # 
