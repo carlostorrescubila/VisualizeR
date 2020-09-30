@@ -6,7 +6,7 @@ upload_excel_ui <- function(id){
   
   fluidPage(
     
-    ### Title
+    ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in an excel format"),
       class = "text-center"

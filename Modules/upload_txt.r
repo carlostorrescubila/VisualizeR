@@ -6,7 +6,7 @@ upload_txt_ui <- function(id){
   
   fluidPage(
     
-    ### Title
+    ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in format txt"),
       class = "text-center"

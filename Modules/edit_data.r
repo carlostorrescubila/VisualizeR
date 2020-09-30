@@ -6,14 +6,14 @@ edit_data_ui <- function(id){
   
   fluidPage(
     
-    ###
+    ##### > Select data #####
     pickerInput(
       inputId = ns("edit_data_select"),
       label = "Select data:",
       choices = NULL
     ),
     
-    ###
+    ### > #####
     dataTableOutput(ns("edit_data_table"))
     
   )
@@ -24,7 +24,7 @@ edit_data_ui <- function(id){
 
 edit_data_server <- function(input, output, session){
   
-  ### Update choices in select input data
+  ##### > Update choices in select data #####
   observe({
     updatePickerInput(
       session, 
@@ -34,7 +34,7 @@ edit_data_server <- function(input, output, session){
     )
   })
   
-  ### Show selectet data
+  ##### > Show selectet data #####
   output$edit_data_table <- DT::renderDataTable(
     expr = {
       Uploaded_Data[[input$edit_data_select]]

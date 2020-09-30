@@ -6,13 +6,13 @@ upload_csv_ui <- function(id){
   
   fluidPage(
     
-    ### Title
+    ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in format csv"),
       class = "text-center"
     ),
     
-    ### Select file
+    ##### > Select file #####
     fileInput(
       inputId = ns("upload_data_csv_file"),
       label = h4(strong("Select file to upload")),
@@ -22,10 +22,10 @@ upload_csv_ui <- function(id){
     
     renderTable(ns("upload_data_view")),
     
-    #### Select options 
+    ##### > Select options #####
     fluidRow(
       
-      ### Name of data
+      ##### >> Name of data #####
       column(4, textInput(
         inputId = ns("upload_data_csv_text"),
         label = h4(strong("Name your data base")),
@@ -33,19 +33,18 @@ upload_csv_ui <- function(id){
         )
       ),
       
-      ### Select separator
+      ##### >> Select separator #####
       column(4, pickerInput(
         inputId = ns("upload_data_csv_delimiter"),
         label = h4(strong("Delimiter:")),
         choices = c(
           "comma" = ",",
           "semicolon" = ";",
-          "tab" = "\t",
-          "whitespace"
+          "tab" = "\t"
           )
       )),
       
-      ### Fill NA
+      ##### >> Fill NA #####
       column(4, pickerInput(
         inputId = ns("upload_data_csv_na"),
         label = h4(strong("Fill missing values as:")),
@@ -61,7 +60,7 @@ upload_csv_ui <- function(id){
     
     br(),
     
-    ### Checkbox for row names
+    ##### >> Checkbox for row names #####
     awesomeCheckbox(
       inputId = ns("upload_data_csv_first_row"),
       label = h4(strong("First row as colnames"), style = "vertical-align: -20px;"),
@@ -69,12 +68,12 @@ upload_csv_ui <- function(id){
       status = "succes"
     ),
     
-    ### Show data
+    ##### > Show data #####
     dataTableOutput(ns("upload_data_csv_table")),
     
     br(),
     
-    ### Upload data button
+    ##### > Upload data button #####
     actionBttn(
       inputId = ns("upload_data_csv_confirm"),
       label = "Upload to VisualizeR",
@@ -91,7 +90,7 @@ upload_csv_ui <- function(id){
 
 upload_csv_server <- function(input, output, session){
   
-  ### Load data base 
+  ##### > Show data #####
   output$upload_data_csv_table <- DT::renderDataTable(
     expr = {
       file <- input$upload_data_csv_file
@@ -112,7 +111,7 @@ upload_csv_server <- function(input, output, session){
     rownames = FALSE
   )
   
-  ### Update the name of the data in session
+  ##### > Update the name of the data #####
   observe({
       updateTextInput(
         session,
@@ -122,12 +121,12 @@ upload_csv_server <- function(input, output, session){
       )
   })
   
-  ### Upload data button actions
+  ##### > Upload data button actions #####
   observeEvent(input$upload_data_csv_confirm, {
     
     file <- input$upload_data_csv_file
     
-    ### Message of empry file
+    ##### > Message of empry file #####
     if(is.null(file)) {
       sendSweetAlert(
         session = session,
@@ -138,7 +137,7 @@ upload_csv_server <- function(input, output, session){
       )
     }
     
-    ### Message of empty name
+    ##### > Message of empty name #####
     if(input$upload_data_csv_text == ""){
       sendSweetAlert(
         session = session,
@@ -149,7 +148,7 @@ upload_csv_server <- function(input, output, session){
       )
     }
     
-    ### Upload file
+    ##### > Upload file #####
     if(!is.null(file) && input$upload_data_csv_text != ""){
       Uploaded_Data[[input$upload_data_csv_text]] <- read.csv(
         file = file$datapath,
@@ -159,7 +158,7 @@ upload_csv_server <- function(input, output, session){
       )
     }
     
-    ### Show success message
+    ##### > Show success message #####
     if(input$upload_data_csv_text %in% names(Uploaded_Data)){
       sendSweetAlert(
         session = session,

@@ -22,6 +22,13 @@ Plot_libraries <-
 
 Uploaded_Data <- reactiveValues()
 
+Colors_Choices <- c(
+  "red", 
+  "blue", 
+  "darkgreen", 
+  "purple"
+)
+
 ##### > Alerts #############################################################################
 
 useSweetAlert()
