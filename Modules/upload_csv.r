@@ -155,7 +155,7 @@ upload_csv_server <- function(input, output, session){
         header = input$upload_data_csv_first_row,
         sep = input$upload_data_csv_delimiter,
         na = input$upload_data_csv_na
-      )
+        ) 
     }
     
     ##### > Show success message #####

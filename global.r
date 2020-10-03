@@ -22,12 +22,22 @@ Plot_libraries <-
 
 Uploaded_Data <- reactiveValues()
 
+
 Colors_Choices <- c(
-  "red", 
-  "blue", 
-  "darkgreen", 
-  "purple"
-)
+  "tomato", 
+  "salmon", 
+  "orange", 
+  "yellow green", 
+  "dark green", 
+  "sea green",
+  "dark cyan",
+  "steel blue", 
+  "royal blue", 
+  "slate blue", 
+  "dark orchid", 
+  "plum", 
+  "light pink"
+  )
 
 ##### > Alerts #############################################################################
 

@@ -36,18 +36,12 @@ shinyServer(function(input, output, session) {
     #     options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, fixedColumns = TRUE),
     #     editable = TRUE,
     #     rownames = FALSE) 
+
+##### > R base #################################################################################
+
+    ##### >> Bar chart #########################################################################
     
-
+    callModule(r_base_bar_chart_server, "r_base_bar_chart_body")
+    
 })
-
-
-# library(httr)
-# library(jsonlite)
-# library(magrittr) 
-# AA <- httr::GET(
-#     # "https://analisis.datosabiertos.jcyl.es/explore/embed/dataset/situacion-epidemiologica-coronavirus-en-castilla-y-leon/table/?disjunctive.provincia&sort=fecha"
-#     "https://analisis.datosabiertos.jcyl.es/api/records/1.0/search/?dataset=situacion-epidemiologica-coronavirus-en-castilla-y-leon&q=&sort=fecha&facet=fecha&facet=provincia"
-#     ) %>% 
-#     content("text") %>% 
-#     jsonlite::fromJSON()
-# AA$records$fields
+    
