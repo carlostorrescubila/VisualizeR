@@ -85,7 +85,6 @@ ui <- div(
     dashboardPage(
         header,
         sidebar,
-        body#,
-        # useShinyalert()
+        body
     )
 )
