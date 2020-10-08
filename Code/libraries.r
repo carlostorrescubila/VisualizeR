@@ -2,8 +2,8 @@
 # 
 library(readr)
 
-library(rjson)
-library(RCurl)
+# library(rjson)
+# library(RCurl)
 # 
 # #### > Data treatment ##########################################################################
 # 
@@ -20,10 +20,9 @@ library(DT)
 # 
 # library(plotly)
 # 
-# #### > Map #####################################################################################
-# 
-# library(raster)
-# library(leaflet)
+# #### > Clipboard ##############################################################################
+
+library(clipr)
 
 #### > Shiny app ###############################################################################
 
@@ -32,5 +31,4 @@ library(shinydashboard)
 library(shinyWidgets)
 # library(shinydashboardPlus)
 library(shinyjs)
-library(rclipboard)
 # library(shinyalert)

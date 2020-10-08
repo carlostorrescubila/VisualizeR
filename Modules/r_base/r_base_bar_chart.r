@@ -15,12 +15,14 @@ r_base_bar_chart_ui <- function(id){
     dropdown(
       
       ##### >>Dropdown options #####
-      # circle = TRUE, 
       style = "unite", 
       status = "primary",
       icon = icon("gear"), 
       width = "300px",
+      circle = TRUE, 
       tooltip = tooltipOptions(title = "Click to see inputs !"), 
+      label = "Inputs", 
+      animate = animateOptions(enter = "fadeInDown", exit = "fadeOutUp", duration = 0.5),
       
       div(
         style='max-height: 55vh; overflow-y: auto;',
@@ -70,12 +72,7 @@ r_base_bar_chart_ui <- function(id){
           label = "Title:", 
           placeholder = "Your title", 
           addon = icon("font")
-          ), 
-        # textInput(
-        #   inputId = ns("r_base_bar_chart_title"),
-        #   label = "Title:",
-        #   value = "Bar chart with R base"
-        # ),
+          ),
         
         ##### >> x-label #####
         textInputAddon(
@@ -84,11 +81,6 @@ r_base_bar_chart_ui <- function(id){
           placeholder = "Your x-label",
           addon = icon("grip-lines")
         ),
-        # textInput(
-        #   inputId = ns("r_base_bar_chart_x_label"),
-        #   label = "X label:",
-        #   value = ""
-        # ),
         
         ##### >> y-label #####
         textInputAddon(
@@ -97,11 +89,6 @@ r_base_bar_chart_ui <- function(id){
           placeholder = "Your y-label",
           addon = icon("grip-lines-vertical")
         )
-        # textInput(
-        #   inputId = ns("r_base_bar_chart_y_label"),
-        #   label = "Y label:",
-        #   value = ""
-        # )
           
       )
       
@@ -110,7 +97,13 @@ r_base_bar_chart_ui <- function(id){
   
   ##### > Bar chart #####
   plotOutput(ns("r_base_bar_chart_plot")), 
-  br(), 
+  br(),
+  # '<pre><code class="language-r" id="codeId002">checkboxGroupButtons(
+  #   inputId = "Id002",
+  #   label = "Choices", 
+  #   choices = c("Choice 1", "Choice 2", "Choice 3"),
+  #   status = "danger"
+  # )</code></pre>',
   
   ##### > Show code #####
   
@@ -125,10 +118,22 @@ r_base_bar_chart_ui <- function(id){
   
   ##### >> Code #####
   shinyjs::useShinyjs(),
-  rclipboardSetup(), 
   shinyjs::hidden(
-    verbatimTextOutput(ns("r_base_bar_chart_code")), 
-    uiOutput(ns("r_base_bar_chart_copy_clipboard"))
+    pre(
+      id = ns("hidden_code"), 
+      code(
+        htmlOutput(ns("r_base_bar_chart_code")), 
+        .noWS = "inside"
+        ), 
+      .noWS = "inside"
+      )
+    ), 
+  
+  actionButton(
+    inputId = ns("clipbtn"), 
+    label = "",
+    icon = icon("copy", "fa-2x"), 
+    style = "color: white; background-color: #2C3E50"
     )
   
   )
@@ -138,6 +143,9 @@ r_base_bar_chart_ui <- function(id){
 ##### Server ######################################################################
 
 r_base_bar_chart_server <- function(input, output, session){
+  output$message <- renderText({
+    code("TRUE", class = "language-r")
+    })
   
   ##### > Update data choices #####
   observe({
@@ -168,7 +176,7 @@ r_base_bar_chart_server <- function(input, output, session){
   ##### > Update X label #####
   observe({
     req(input$r_base_bar_chart_select_variable)
-    if(isTRUE(input$r_base_bar_chart_vertically)){  #!is.null(input$r_base_bar_chart_select_variable)
+    if(isTRUE(input$r_base_bar_chart_vertically)){
       updateTextInput(
         session, 
         inputId = "r_base_bar_chart_x_label", 
@@ -231,45 +239,51 @@ r_base_bar_chart_server <- function(input, output, session){
       )
   })
   
-  ##### > Text to use in show code #####
   Text_Data <- reactive({
     paste(
-      "barplot(", 
-      paste0("summary(",
-      input$r_base_bar_chart_select_data, "$", input$r_base_bar_chart_select_variable,
-      ")", ","), 
-      paste0("horiz = ", input$r_base_bar_chart_vertically, ","), 
-      paste0('col = "', input$r_base_bar_chart_color, '"', ","), 
-      paste0('main = "', input$r_base_bar_chart_title, '"', ","),
-      paste0('xlab = "', input$r_base_bar_chart_x_label, '"', ","),
-      paste0('ylab = "', input$r_base_bar_chart_y_label, '"'), 
-      ")", 
+      "barplot(",
+      paste0("  summary(",
+             input$r_base_bar_chart_select_data, "$", input$r_base_bar_chart_select_variable,
+             ")", ","),
+      paste0("  horiz = ", !input$r_base_bar_chart_vertically,  ","   ),
+      paste0('  col = "',  input$r_base_bar_chart_color,        '",'  ),
+      paste0('  main = "', input$r_base_bar_chart_title,        '",'  ),
+      paste0('  xlab = "', input$r_base_bar_chart_x_label,      '",'  ),
+      paste0('  ylab = "', input$r_base_bar_chart_y_label,      '"'   ),
+      ")",
       sep = "\n"
-    ) 
+    )
   })
-  output$r_base_bar_chart_code <- renderText({Text_Data()})
   
-  ##### > Toggle text #####
+  ##### > Code #####
+  output$r_base_bar_chart_code <- renderText({ 
+    paste(
+      "barplot(",
+      paste0("  summary(",
+             input$r_base_bar_chart_select_data, "$", input$r_base_bar_chart_select_variable,
+             ")", ","),
+      paste0("  horiz = ",  code_logical(!input$r_base_bar_chart_vertically), ","),
+      paste0('  col = ',    code_string(input$r_base_bar_chart_color),        ","),
+      paste0('  main = ',   code_string(input$r_base_bar_chart_title),        ","),
+      paste0('  xlab = ',   code_string(input$r_base_bar_chart_x_label),      ","),
+      paste0('  ylab = ',   code_string(input$r_base_bar_chart_y_label)          ),
+      ")",
+      sep = "\n"
+    )
+    })
+
+  ##### > Toggle Code #####
   observeEvent(input$r_base_bar_chart_action_showcode, {
     req(input$r_base_bar_chart_select_data)
     
     ##### >> Show/Hide code #####
-    shinyjs::toggle(id = "r_base_bar_chart_code", anim = TRUE)
-    
-    ##### >> Copy to clipboard button #####
-    output$r_base_bar_chart_copy_clipboard <- renderUI({
-      rclipButton(
-        inputId = "r_base_bar_chart_copy_clipboard_button", 
-        label = "Copy to clipboard", 
-        clipText = Text_Data(), 
-        icon("clipboard")
-        )
-    })
+    shinyjs::toggle(id = "hidden_code", anim = TRUE)
   })
-
-  # Workaround for execution within RStudio version < 1.2
-  observeEvent(input$r_base_bar_chart_copy_clipboard_button, {
-    clipr::write_clip(Text_Data())
-    })
+  
+  #### > Copy to clipboard ###
+  observeEvent(
+    input$clipbtn, 
+    write_clip(Text_Data())
+    )
   
 }
