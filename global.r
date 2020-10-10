@@ -54,7 +54,3 @@ list.files("./Modules/r_base") %>%
   # str_subset(pattern = ".r") %>% 
   paste0("./Modules/r_base/", .) %>% 
   sapply(source)
-
-##### > Code format ########################################################################
-
-source("./Code/code_format.r", encoding = "UTF-8")

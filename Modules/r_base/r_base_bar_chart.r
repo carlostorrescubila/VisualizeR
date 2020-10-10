@@ -20,7 +20,7 @@ r_base_bar_chart_ui <- function(id){
       icon = icon("gear"), 
       width = "300px",
       circle = TRUE, 
-      tooltip = tooltipOptions(title = "Click to see inputs !"), 
+      tooltip = tooltipOptions(title = "Click to see inputs!"), 
       label = "Inputs", 
       animate = animateOptions(enter = "fadeInDown", exit = "fadeOutUp", duration = 0.5),
       
@@ -119,22 +119,23 @@ r_base_bar_chart_ui <- function(id){
   ##### >> Code #####
   shinyjs::useShinyjs(),
   shinyjs::hidden(
-    pre(
-      id = ns("hidden_code"), 
-      code(
-        htmlOutput(ns("r_base_bar_chart_code")), 
-        .noWS = "inside"
-        ), 
-      .noWS = "inside"
+    div(
+      id = ns("hidden_code"),
+      codeOutput(ns("r_base_bar_chart_code")),
+      div(
+        style = "float: right", 
+        actionButton(
+          inputId = ns("clipbtn"),
+          label = "",
+          icon = icon("copy", "fa-2x"),
+          style = "color: white; background-color: #2C3E50"
+        ),
+        bsTooltip(id = ns("clipbtn"), title = "Copy to clipboard", placement = "left")
       )
-    ), 
-  
-  actionButton(
-    inputId = ns("clipbtn"), 
-    label = "",
-    icon = icon("copy", "fa-2x"), 
-    style = "color: white; background-color: #2C3E50"
-    )
+      )
+    ) 
+  # HTML(highlight('ggplot2::ggplot()')),
+  # pre(code(HTML(highlight('ggplot2::ggplot()'))))
   
   )
 
@@ -239,6 +240,7 @@ r_base_bar_chart_server <- function(input, output, session){
       )
   })
   
+  ##### > Code #####
   Text_Data <- reactive({
     paste(
       "barplot(",
@@ -255,32 +257,18 @@ r_base_bar_chart_server <- function(input, output, session){
     )
   })
   
-  ##### > Code #####
-  output$r_base_bar_chart_code <- renderText({ 
-    paste(
-      "barplot(",
-      paste0("  summary(",
-             input$r_base_bar_chart_select_data, "$", input$r_base_bar_chart_select_variable,
-             ")", ","),
-      paste0("  horiz = ",  code_logical(!input$r_base_bar_chart_vertically), ","),
-      paste0('  col = ',    code_string(input$r_base_bar_chart_color),        ","),
-      paste0('  main = ',   code_string(input$r_base_bar_chart_title),        ","),
-      paste0('  xlab = ',   code_string(input$r_base_bar_chart_x_label),      ","),
-      paste0('  ylab = ',   code_string(input$r_base_bar_chart_y_label)          ),
-      ")",
-      sep = "\n"
-    )
+  ##### > Render code #####
+  output$r_base_bar_chart_code <- renderCode({ 
+    highlight(Text_Data())
     })
 
   ##### > Toggle Code #####
   observeEvent(input$r_base_bar_chart_action_showcode, {
     req(input$r_base_bar_chart_select_data)
-    
-    ##### >> Show/Hide code #####
     shinyjs::toggle(id = "hidden_code", anim = TRUE)
   })
   
-  #### > Copy to clipboard ###
+  ##### > Copy to clipboard #####
   observeEvent(
     input$clipbtn, 
     write_clip(Text_Data())

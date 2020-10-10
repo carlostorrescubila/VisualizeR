@@ -35,13 +35,16 @@ edit_data_server <- function(input, output, session){
   })
   
   ##### > Show selectet data #####
-  output$edit_data_table <- DT::renderDataTable(
-    expr = {
-      Uploaded_Data[[input$edit_data_select]]
-    }, 
-    filter = 'top',
-    options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, fixedColumns = TRUE),
-    editable = TRUE,
-    rownames = FALSE) 
+  observe({
+    req(input$edit_data_select)
+    output$edit_data_table <- DT::renderDataTable(
+      expr = {Uploaded_Data[[input$edit_data_select]]}, 
+      filter = 'top',
+      options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, fixedColumns = TRUE),
+      editable = TRUE,
+      rownames = FALSE
+    ) 
+  })
+  
   
 }
