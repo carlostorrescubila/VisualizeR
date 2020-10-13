@@ -62,8 +62,9 @@ r_base_bar_chart_ui <- function(id){
         pickerInput(
           inputId = ns('r_base_bar_chart_color'),
           label = 'Color of the bars:',
-          choices = Colors_Choices, 
-          options = list(size = 4)
+          choices = colors(), 
+          width = "99.5%", 
+          options = list(size = 5, `live-search` = TRUE)
         ),
         
         ##### >> Main #####
@@ -98,12 +99,6 @@ r_base_bar_chart_ui <- function(id){
   ##### > Bar chart #####
   plotOutput(ns("r_base_bar_chart_plot")), 
   br(),
-  # '<pre><code class="language-r" id="codeId002">checkboxGroupButtons(
-  #   inputId = "Id002",
-  #   label = "Choices", 
-  #   choices = c("Choice 1", "Choice 2", "Choice 3"),
-  #   status = "danger"
-  # )</code></pre>',
   
   ##### > Show code #####
   
@@ -121,21 +116,17 @@ r_base_bar_chart_ui <- function(id){
   shinyjs::hidden(
     div(
       id = ns("hidden_code"),
-      codeOutput(ns("r_base_bar_chart_code")),
-      div(
-        style = "float: right", 
-        actionButton(
-          inputId = ns("clipbtn"),
-          label = "",
-          icon = icon("copy", "fa-2x"),
-          style = "color: white; background-color: #2C3E50"
+      .noWS = "inside",
+      codeOutput(ns("r_base_bar_chart_code")), 
+      actionButton(
+        inputId = ns("clipbtn"),
+        label = "Copy code to clipboard",
+        style = "color: white; background-color: #2C3E50;", 
+        icon = icon("copy")
         ),
-        bsTooltip(id = ns("clipbtn"), title = "Copy to clipboard", placement = "left")
+      bsTooltip(id = ns("clipbtn"), title = "Copy to clipboard", placement = "right")
       )
-      )
-    ) 
-  # HTML(highlight('ggplot2::ggplot()')),
-  # pre(code(HTML(highlight('ggplot2::ggplot()'))))
+    )
   
   )
 
@@ -252,15 +243,15 @@ r_base_bar_chart_server <- function(input, output, session){
       paste0('  main = "', input$r_base_bar_chart_title,        '",'  ),
       paste0('  xlab = "', input$r_base_bar_chart_x_label,      '",'  ),
       paste0('  ylab = "', input$r_base_bar_chart_y_label,      '"'   ),
-      ")",
+      ")", 
       sep = "\n"
     )
   })
   
   ##### > Render code #####
-  output$r_base_bar_chart_code <- renderCode({ 
+  output$r_base_bar_chart_code <- renderCode({
     highlight(Text_Data())
-    })
+  })
 
   ##### > Toggle Code #####
   observeEvent(input$r_base_bar_chart_action_showcode, {
