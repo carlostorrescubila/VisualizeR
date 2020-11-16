@@ -8,11 +8,11 @@ shinyServer(function(input, output, session) {
     
     ##### >> txt ###############################################################################
     
-    callModule(upload_csv_server, "upload_csv")
+    callModule(upload_csv_server, "upload_txt")
     
     ##### >> excel #############################################################################
     
-    callModule(upload_csv_server, "upload_csv")
+    callModule(upload_csv_server, "upload_excel")
     
 ##### > Edit data ##############################################################################
     
@@ -40,8 +40,10 @@ shinyServer(function(input, output, session) {
 ##### > R base #################################################################################
 
     ##### >> Bar chart #########################################################################
-    
     callModule(r_base_bar_chart_server, "r_base_bar_chart_body")
+    
+    ##### >> Scatter plot ######################################################################
+    callModule(r_base_scatter_plot_server, "r_base_scatter_plot_body")
     
 })
     
