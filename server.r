@@ -1,5 +1,30 @@
 shinyServer(function(input, output, session) {
     
+##### > Message menu ###########################################################################
+    
+    output$messageMenu <- renderMenu({
+        dropdownMenu(
+            icon = icon(name = "info-circle", class = "fa-lg"), 
+            headerText = strong("App Information"),
+            messageItem(
+                from = "GitHub Repository",
+                message = "Documentation, Source",
+                icon = icon(name = "github", class = "fa"),
+                href = "https://github.com/carlostorrescubila/COVID-19_CyL"
+            ),
+            messageItem(
+                from = "Issues",
+                message = "Report Issues",
+                icon = icon("exclamation-circle"),
+                href = "https://github.com/carlostorrescubila/COVID-19_CyL/issues"
+            )
+        )
+    })
+    
+##### > Home ############################################################################
+    
+    callModule(module = serverChangeTheme, id = "moduleChangeTheme")
+    
 ##### > Upload data ############################################################################
     
     ##### >> csv ###############################################################################
@@ -44,6 +69,5 @@ shinyServer(function(input, output, session) {
     
     ##### >> Scatter plot ######################################################################
     callModule(r_base_scatter_plot_server, "r_base_scatter_plot_body")
-    
 })
     

@@ -28,6 +28,7 @@ library(clipr)
 
 library(shiny)
 library(shinydashboard)
+library(dashboardthemes)
 library(shinyWidgets)
 library(shinyBS)
 library(shinyjs)

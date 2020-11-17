@@ -3,6 +3,7 @@ sidebar <- dashboardSidebar(
   # width = 275,
   collapsed = F, 
   sidebarMenu(
+    menuItem("Home", tabName = "home", icon = icon("home")),
     menuItem("Upload Data", tabName = "upload_data", icon = icon("upload")), 
     menuItem("Edit Data", tabName = "edit_data", icon = icon("edit")),
     menuItem("R base", tabName = "r_base", icon = icon("r-project"), 

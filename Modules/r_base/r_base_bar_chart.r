@@ -15,7 +15,7 @@ r_base_bar_chart_ui <- function(id){
     dropdown(
       
       ##### >>Dropdown options #####
-      style = "unite", 
+      style = "bordered", 
       status = "primary",
       icon = icon("gear"), 
       width = "300px",
@@ -121,7 +121,7 @@ r_base_bar_chart_ui <- function(id){
       actionButton(
         inputId = ns("clipbtn"),
         label = "Copy code to clipboard",
-        style = "color: white; background-color: #2C3E50;", 
+        # style = "color: white; background-color: #2C3E50;", 
         icon = icon("copy")
         ),
       bsTooltip(id = ns("clipbtn"), title = "Copy to clipboard", placement = "right")

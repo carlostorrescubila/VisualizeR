@@ -11,6 +11,7 @@ header <- dashboardHeader(
     #     tags$span(class = "logo-lg", "Covid-19 en Castilla y León")
     # ), 
     # titleWidth = 275,
+    dropdownMenuOutput(outputId = "Customize_Menu"),
     dropdownMenuOutput(outputId = "messageMenu")
 )
 
@@ -21,8 +22,23 @@ source("./Modules/sidebar.r", encoding = "UTF-8")
 ##### > Body ###############################################################################
 
 body <- dashboardBody(
-
+    
+    ##### >> Set Theme #####################################################################
+    shinyDashboardThemes(
+        theme = "grey_light"
+    ),
+    uiChangeThemeOutput(),
+    
     tabItems(
+        
+        ##### >> Home ######################################################################
+        tabItem(
+            tabName = "home",
+            fluidRow(column(
+                width = 12,
+                uiChangeThemeDropdown()
+            ))
+        ),
 
         ##### >> Upload data ###############################################################
 
@@ -87,13 +103,13 @@ body <- dashboardBody(
         # )
         # )
     
-        ##### >> Bar chart ##################################################################
+        ##### >>> Bar chart #################################################################
         tabItem(
             tabName = "r_base_bar_chart",
             r_base_bar_chart_ui("r_base_bar_chart_body")
             ), 
     
-        ##### >> Scatter plot ###############################################################
+        ##### >>> Scatter plot ##############################################################
         tabItem(
             tabName = "r_base_scatter_plot",
             r_base_scatter_plot_ui("r_base_scatter_plot_body")
