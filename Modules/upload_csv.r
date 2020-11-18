@@ -1,4 +1,4 @@
-##### UI ##################################################################################################
+##### UI ############################################################################
 
 upload_csv_ui <- function(id){
   
@@ -63,9 +63,9 @@ upload_csv_ui <- function(id){
     ##### >> Checkbox for row names #####
     awesomeCheckbox(
       inputId = ns("upload_data_csv_first_row"),
-      label = h4(strong("First row as colnames"), style = "vertical-align: -20px;"),
+      label = h4(strong("First row as colnames")),
       value = TRUE,
-      status = "succes"
+      status = "success"
     ),
     
     ##### > Show data #####
@@ -77,7 +77,8 @@ upload_csv_ui <- function(id){
     actionBttn(
       inputId = ns("upload_data_csv_confirm"),
       label = "Upload to VisualizeR",
-      style = "unite",
+      style = "bordered",
+      color = "primary",
       size = "lg",
       block = TRUE
       )
@@ -86,7 +87,7 @@ upload_csv_ui <- function(id){
   
 }
 
-##### Server ##############################################################################################
+##### Server ########################################################################
 
 upload_csv_server <- function(input, output, session){
   
@@ -106,7 +107,8 @@ upload_csv_server <- function(input, output, session){
     # spacing = 'xs',
     # align = 'c',
     filter = 'top',
-    options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, fixedColumns = TRUE),
+    options = list(scrollX = 500, deferRender = TRUE, 
+                   scroller = TRUE, fixedColumns = TRUE),
     editable = TRUE,
     rownames = FALSE
   )
@@ -163,7 +165,9 @@ upload_csv_server <- function(input, output, session){
       sendSweetAlert(
         session = session,
         title = "Done!",
-        text = paste0('Your data "', input$upload_data_csv_text, '" have been uploaded'),
+        text = paste0('Your data "', 
+                      input$upload_data_csv_text, 
+                      '" have been uploaded'),
         type = "success"
       )
     }

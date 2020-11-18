@@ -108,7 +108,13 @@ body <- dashboardBody(
             tabName = "r_base_bar_chart",
             r_base_bar_chart_ui("r_base_bar_chart_body")
             ), 
-    
+        
+        ##### >>> Box-Plot ##############################################################
+        tabItem(
+            tabName = "r_base_box-plot",
+            r_base_box_plot_ui("r_base_box_plot_body")
+        ),
+        
         ##### >>> Scatter plot ##############################################################
         tabItem(
             tabName = "r_base_scatter_plot",

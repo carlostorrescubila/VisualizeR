@@ -67,7 +67,11 @@ shinyServer(function(input, output, session) {
     ##### >> Bar chart #########################################################################
     callModule(r_base_bar_chart_server, "r_base_bar_chart_body")
     
+    ##### >> Bar chart #########################################################################
+    callModule(r_base_box_plot_server, "r_base_box_plot_body")
+    
     ##### >> Scatter plot ######################################################################
     callModule(r_base_scatter_plot_server, "r_base_scatter_plot_body")
-})
+
+    })
     

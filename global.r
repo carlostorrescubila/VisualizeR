@@ -1,6 +1,8 @@
-##### > Libraries ########################################################################
+##### > Libraries and functions ##########################################################
 
-source("./Code/libraries.r", encoding = "UTF-8")
+list.files("./Code") %>% 
+  paste0("./Code/", .) %>% 
+  sapply(source)
 
 ##### > Side bar menu sub items ##########################################################
 
