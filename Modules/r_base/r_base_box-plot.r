@@ -67,21 +67,14 @@ r_base_box_plot_ui <- function(id){
         ),
         
         ##### >> Color #####
-        selectizeInput(
-          inputId = ns('r_base_box_plot_color'),
-          label = 'Color of the bars:',
-          choices = colors(),
-          multiple = TRUE,
-          width = "99.5%",
-          options = list(size = 5)
-        ),
-        
-        # ###
-        # sliderInput(
-        #   inputId = ns("r_base_box_plot_n"), 
-        #   min = 1, max = 5, value = 5, 
-        #   label = "Number of groups"
-        #   ),
+        uiOutput(ns('r_base_box_plot_color_ui')),
+        # pickerInput(
+        #   inputId = ns("r_base_box_plot_color"),
+        #   label = 'Color of the boxes:',
+        #   choices = colors(),
+        #   multiple = TRUE,
+        #   options = list(`multiple-separator` = " | ", size = 5, `live-search` = TRUE)
+        # ),
         
         ##### >> Main #####
         textInputAddon(
@@ -152,6 +145,8 @@ r_base_box_plot_ui <- function(id){
 
 r_base_box_plot_server <- function(input, output, session){
   
+  ns <- session$ns
+  
   ##### > Update data choices #####
   observe({
     updatePickerInput(
@@ -190,42 +185,68 @@ r_base_box_plot_server <- function(input, output, session){
           is.character(col) | is.factor(col)
           }
         ) %>%
-        colnames
+        colnames %>% 
+        c("NULL", .)
     )
   })
   
   ##### > Update colors #####
-
-  # Max_Colors <- reactive({
-  #   paste0(
-  #     "Uploaded_Data[['", input$r_base_box_plot_select_data, "']]",
-  #     "$", input$r_base_box_plot_select_groups
-  #     ) %>%
-  #     parse(text = .) %>%
-  #     eval %>%
-  #     levels %>%
-  #     length()
-  # })
-  # observe({
-  #   req(input$r_base_box_plot_select_data)
-  #   updateSelectizeInput(
-  #     session,
-  #     inputId = "r_base_box_plot_color",
-  #     options = list(maxItems = 3)
-  #     )
-  # })
+  Max_Colors <- reactive({
+    req(input$r_base_box_plot_select_data)
+    if(input$r_base_box_plot_select_groups == "NULL"){
+      1 
+    } else {
+      paste0(
+        "Uploaded_Data[['", input$r_base_box_plot_select_data, "']]",
+        "$", input$r_base_box_plot_select_groups
+        ) %>%
+        parse(text = .) %>%
+        eval %>%
+        levels %>%
+        length()
+    }
+  })
+  output$r_base_box_plot_color_ui <- renderUI({
+    if(is.null(input$r_base_box_plot_select_data)){
+      pickerInput(
+        inputId = ns('r_base_box_plot_color'),
+        label = 'Colors',
+        choices = colors(),
+        multiple = TRUE,
+        options = list(`multiple-separator` = " | ", 
+                       size = 5, 
+                       `live-search` = TRUE
+                       )
+      )
+    } else {
+      # req(input$r_base_box_plot_select_data)
+      pickerInput(
+        inputId = ns('r_base_box_plot_color'),
+        label = 'Colors',
+        choices = colors(),
+        multiple = TRUE,
+        options = list(`multiple-separator` = " | ", 
+                       size = 5, 
+                       `live-search` = TRUE,
+                       "max-options" = Max_Colors())
+        )
+    }
+    
+  })
 
   ##### > Update X label #####
   observe({
-    req(input$r_base_box_plot_select_groups)
+    req(input$r_base_box_plot_select_data)
     if(isTRUE(input$r_base_box_plot_vertically)){
       updateTextInput(
         session,
         inputId = "r_base_box_plot_x_label",
         label = NULL,
-        value = input$r_base_box_plot_select_groups
+        value = if_else(input$r_base_box_plot_select_groups == "NULL", 
+                        "", input$r_base_box_plot_select_groups)
         )
-    } else {
+      }
+    if(isFALSE(input$r_base_box_plot_vertically)) {
       updateTextInput(
         session,
         inputId = "r_base_box_plot_x_label",
@@ -237,13 +258,14 @@ r_base_box_plot_server <- function(input, output, session){
 
   ##### > Update Y label #####
   observe({
-    req(input$r_base_box_plot_select_groups)
+    req(input$r_base_box_plot_select_data)
     if(isFALSE(input$r_base_box_plot_vertically)){
       updateTextInput(
         session,
         inputId = "r_base_box_plot_y_label",
         label = NULL,
-        value = input$r_base_box_plot_select_groups
+        value = if_else(input$r_base_box_plot_select_groups == "NULL", 
+                        "", input$r_base_box_plot_select_groups)
       )
     } else {
       updateTextInput(
@@ -257,7 +279,16 @@ r_base_box_plot_server <- function(input, output, session){
 
   ##### > Formula used in plot #####
   My_Formula <- reactive({
-    paste0(
+    if(input$r_base_box_plot_select_groups == "NULL"){
+      paste0(
+        "Uploaded_Data[['", input$r_base_box_plot_select_data, "']]",  
+        "$", 
+        input$r_base_box_plot_select_variable
+      ) %>% 
+        parse(text = .) %>% 
+        eval
+    } else {
+      paste0(
       "Uploaded_Data[['", input$r_base_box_plot_select_data, "']]",  
       "$", 
       input$r_base_box_plot_select_variable, 
@@ -267,35 +298,56 @@ r_base_box_plot_server <- function(input, output, session){
       input$r_base_box_plot_select_groups
       ) %>%
       as.formula()
+    }
   })
 
   ##### > Box-plot #####
   output$r_base_box_plot_plot <- renderPlot({
     req(input$r_base_box_plot_select_data)
-    boxplot(
-      My_Formula(),
-      horizontal = !input$r_base_box_plot_vertically,
-      col = input$r_base_box_plot_color,
-      main = input$r_base_box_plot_title,
-      xlab = input$r_base_box_plot_x_label,
-      ylab = input$r_base_box_plot_y_label
+    if(input$r_base_box_plot_select_groups == "NULL"){
+      boxplot(
+        x = My_Formula(),
+        horizontal = !input$r_base_box_plot_vertically,
+        col = input$r_base_box_plot_color,
+        main = input$r_base_box_plot_title,
+        xlab = input$r_base_box_plot_x_label,
+        ylab = input$r_base_box_plot_y_label
       )
+    } else {
+      boxplot(
+        My_Formula(),
+        horizontal = !input$r_base_box_plot_vertically,
+        col = input$r_base_box_plot_color,
+        main = input$r_base_box_plot_title,
+        xlab = input$r_base_box_plot_x_label,
+        ylab = input$r_base_box_plot_y_label
+        )
+    }
   })
 
   ##### > Code #####
   Text_Data <- reactive({
-    paste(
-      "boxplot(",
-      paste0("  ", input$r_base_box_plot_select_variable, "~", 
-             input$r_base_box_plot_select_groups, ","),
-      paste0("  data = ",        input$r_base_box_plot_select_data,  ","   ),
-      paste0("  horizontal = ", !input$r_base_box_plot_vertically,   ","   ),
+    "boxplot(" %>% 
+      {if(input$r_base_box_plot_select_groups == "NULL")
+        paste(., 
+              paste0("  x = ", input$r_base_box_plot_select_data, "$",
+                     input$r_base_box_plot_select_variable, ","),
+              sep = "\n")
+        else 
+          paste(., 
+                paste0("  ", input$r_base_box_plot_select_variable, "~",
+                       input$r_base_box_plot_select_groups, ","),
+                paste0("  data = ", input$r_base_box_plot_select_data, ","),
+                sep = "\n")
+        } %>% 
+      paste(
+      paste0("  horizontal = ", !input$r_base_box_plot_vertically, ","),
       sep = "\n"
       ) %>% 
       {if(!is.null(input$r_base_box_plot_color)) 
         paste(
           ., 
-          paste0('  col = "', vector_2_string(input$r_base_box_plot_color), '",'), 
+          paste0('  col = ', vector_format(input$r_base_box_plot_color), ','), 
           sep = "\n"
           ) else .} %>% 
       paste(
