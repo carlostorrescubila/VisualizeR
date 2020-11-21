@@ -54,12 +54,13 @@ r_base_box_plot_ui <- function(id){
           options = list(size = 4)
         ),
         
-        ##### >> Box vertically #####
-        h5(strong("Bars drawn vertically:")), 
+        ##### >> Box horizontally #####
+        h5(strong("Bars drawn horizontally:")), 
         switchInput(
-          inputId = ns("r_base_box_plot_vertically"),
-          label = img(icon("chart-bar", class = "solid")),
-          value = TRUE,
+          inputId = ns("r_base_box_plot_horizontally"),
+          label = img(src = "https://www.flaticon.com/svg/static/icons/svg/64/64728.svg", 
+                      style="width: 50%; height:auto;"),
+          value = FALSE,
           onLabel = "TRUE",
           offLabel = "FALSE",
           onStatus = "success",
@@ -68,13 +69,6 @@ r_base_box_plot_ui <- function(id){
         
         ##### >> Color #####
         uiOutput(ns('r_base_box_plot_color_ui')),
-        # pickerInput(
-        #   inputId = ns("r_base_box_plot_color"),
-        #   label = 'Color of the boxes:',
-        #   choices = colors(),
-        #   multiple = TRUE,
-        #   options = list(`multiple-separator` = " | ", size = 5, `live-search` = TRUE)
-        # ),
         
         ##### >> Main #####
         textInputAddon(
@@ -237,7 +231,7 @@ r_base_box_plot_server <- function(input, output, session){
   ##### > Update X label #####
   observe({
     req(input$r_base_box_plot_select_data)
-    if(isTRUE(input$r_base_box_plot_vertically)){
+    if(isFALSE(input$r_base_box_plot_horizontally)){
       updateTextInput(
         session,
         inputId = "r_base_box_plot_x_label",
@@ -245,8 +239,7 @@ r_base_box_plot_server <- function(input, output, session){
         value = if_else(input$r_base_box_plot_select_groups == "NULL", 
                         "", input$r_base_box_plot_select_groups)
         )
-      }
-    if(isFALSE(input$r_base_box_plot_vertically)) {
+      } else {
       updateTextInput(
         session,
         inputId = "r_base_box_plot_x_label",
@@ -259,7 +252,7 @@ r_base_box_plot_server <- function(input, output, session){
   ##### > Update Y label #####
   observe({
     req(input$r_base_box_plot_select_data)
-    if(isFALSE(input$r_base_box_plot_vertically)){
+    if(isTRUE(input$r_base_box_plot_horizontally)){
       updateTextInput(
         session,
         inputId = "r_base_box_plot_y_label",
@@ -307,7 +300,7 @@ r_base_box_plot_server <- function(input, output, session){
     if(input$r_base_box_plot_select_groups == "NULL"){
       boxplot(
         x = My_Formula(),
-        horizontal = !input$r_base_box_plot_vertically,
+        horizontal = input$r_base_box_plot_horizontally,
         col = input$r_base_box_plot_color,
         main = input$r_base_box_plot_title,
         xlab = input$r_base_box_plot_x_label,
@@ -316,7 +309,7 @@ r_base_box_plot_server <- function(input, output, session){
     } else {
       boxplot(
         My_Formula(),
-        horizontal = !input$r_base_box_plot_vertically,
+        horizontal = input$r_base_box_plot_horizontally,
         col = input$r_base_box_plot_color,
         main = input$r_base_box_plot_title,
         xlab = input$r_base_box_plot_x_label,
@@ -341,13 +334,12 @@ r_base_box_plot_server <- function(input, output, session){
                 sep = "\n")
         } %>% 
       paste(
-      paste0("  horizontal = ", !input$r_base_box_plot_vertically, ","),
+      paste0("  horizontal = ", input$r_base_box_plot_horizontally, ","),
       sep = "\n"
       ) %>% 
       {if(!is.null(input$r_base_box_plot_color)) 
         paste(
-          ., 
-          paste0('  col = ', vector_format(input$r_base_box_plot_color), ','), 
+          ., paste0('  col = ', vector_format(input$r_base_box_plot_color), ','), 
           sep = "\n"
           ) else .} %>% 
       paste(

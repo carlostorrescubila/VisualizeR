@@ -46,12 +46,13 @@ r_base_bar_chart_ui <- function(id){
           options = list(size = 4)
         ),
         
-        ##### >> Bars vertically #####
-        h5(strong("Bars drawn vertically:")), 
+        ##### >> Bars horizontally #####
+        h5(strong("Bars drawn horizontally:")), 
         switchInput(
-          inputId = ns("r_base_bar_chart_vertically"),
-          label = img(icon("chart-bar", class = "solid")),
-          value = TRUE,
+          inputId = ns("r_base_bar_chart_horizontally"),
+          label = img(src = "https://www.flaticon.com/svg/static/icons/svg/64/64728.svg", 
+                      style="width: 50%; height:auto;"),
+          value = FALSE,
           onLabel = "TRUE",
           offLabel = "FALSE",
           onStatus = "success",
@@ -59,13 +60,7 @@ r_base_bar_chart_ui <- function(id){
         ),
         
         ##### >> Color #####
-        pickerInput(
-          inputId = ns('r_base_bar_chart_color'),
-          label = 'Color of the bars:',
-          choices = colors(), 
-          width = "99.5%", 
-          options = list(size = 5, `live-search` = TRUE)
-        ),
+        uiOutput(ns('r_base_bar_chart_color_ui')),
         
         ##### >> Main #####
         textInputAddon(
@@ -135,9 +130,8 @@ r_base_bar_chart_ui <- function(id){
 ##### Server ######################################################################
 
 r_base_bar_chart_server <- function(input, output, session){
-  output$message <- renderText({
-    code("TRUE", class = "language-r")
-    })
+  
+  ns <- session$ns
   
   ##### > Update data choices #####
   observe({
@@ -165,10 +159,49 @@ r_base_bar_chart_server <- function(input, output, session){
     )
   })
   
+  ##### > Update colors #####
+  Max_Colors <- reactive({
+    req(input$r_base_bar_chart_select_data)
+    paste0(
+      "Uploaded_Data[['", input$r_base_bar_chart_select_data, "']]",
+      "$", input$r_base_bar_chart_select_variable) %>%
+      parse(text = .) %>%
+      eval %>%
+      summary %>% 
+      length()
+    })
+  output$r_base_bar_chart_color_ui <- renderUI({
+    if(is.null(input$r_base_bar_chart_select_data)){
+      pickerInput(
+        inputId = ns('r_base_bar_chart_color'),
+        label = 'Colors',
+        choices = colors(),
+        multiple = TRUE,
+        options = list(`multiple-separator` = " | ", 
+                       size = 5, 
+                       `live-search` = TRUE
+        )
+      )
+    } else {
+      # req(input$r_base_bar_chart_select_data)
+      pickerInput(
+        inputId = ns('r_base_bar_chart_color'),
+        label = 'Colors',
+        choices = colors(),
+        multiple = TRUE,
+        options = list(`multiple-separator` = " | ", 
+                       size = 5, 
+                       `live-search` = TRUE,
+                       "max-options" = Max_Colors())
+      )
+    }
+    
+  })
+  
   ##### > Update X label #####
   observe({
     req(input$r_base_bar_chart_select_variable)
-    if(isTRUE(input$r_base_bar_chart_vertically)){
+    if(isFALSE(input$r_base_bar_chart_horizontally)){
       updateTextInput(
         session, 
         inputId = "r_base_bar_chart_x_label", 
@@ -188,7 +221,7 @@ r_base_bar_chart_server <- function(input, output, session){
   ##### > Update Y label #####
   observe({
     req(input$r_base_bar_chart_select_variable)
-    if(isFALSE(input$r_base_bar_chart_vertically)){
+    if(isTRUE(input$r_base_bar_chart_horizontally)){
       updateTextInput(
         session, 
         inputId = "r_base_bar_chart_y_label", 
@@ -223,7 +256,7 @@ r_base_bar_chart_server <- function(input, output, session){
     req(input$r_base_bar_chart_select_variable)
     barplot(
       height = Plot_Data(),
-      horiz = !input$r_base_bar_chart_vertically,
+      horiz = input$r_base_bar_chart_horizontally,
       col = input$r_base_bar_chart_color, 
       main = input$r_base_bar_chart_title,
       xlab = input$r_base_bar_chart_x_label,
@@ -236,16 +269,40 @@ r_base_bar_chart_server <- function(input, output, session){
     paste(
       "barplot(",
       paste0("  summary(",
-             input$r_base_bar_chart_select_data, "$", input$r_base_bar_chart_select_variable,
+             input$r_base_bar_chart_select_data, "$", 
+             input$r_base_bar_chart_select_variable,
              ")", ","),
-      paste0("  horiz = ", !input$r_base_bar_chart_vertically,  ","   ),
-      paste0('  col = "',  input$r_base_bar_chart_color,        '",'  ),
-      paste0('  main = "', input$r_base_bar_chart_title,        '",'  ),
-      paste0('  xlab = "', input$r_base_bar_chart_x_label,      '",'  ),
-      paste0('  ylab = "', input$r_base_bar_chart_y_label,      '"'   ),
-      ")", 
+      paste0("  horiz = ", input$r_base_bar_chart_horizontally),
       sep = "\n"
-    )
+      ) %>% 
+      {if(!is.null(input$r_base_bar_chart_color)) 
+        paste(
+          paste0(., ","), 
+          paste0('  col = ', vector_format(input$r_base_bar_chart_color)), 
+          sep = "\n"
+          ) else .} %>%
+      ## Title ##
+      {if(input$r_base_bar_chart_title != "")
+        paste(
+          paste0(., ","),  
+          paste0('  main = "', input$r_base_bar_chart_title, '"'),
+          sep = "\n"
+        ) else .} %>%
+      ## X label ##
+      {if(input$r_base_bar_chart_x_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  xlab = "', input$r_base_bar_chart_x_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      ## Y label ##
+      {if(input$r_base_bar_chart_y_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  ylab = "', input$r_base_bar_chart_y_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      paste(., ")", sep = "\n")
   })
   
   ##### > Render code #####
