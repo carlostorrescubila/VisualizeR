@@ -324,31 +324,51 @@ r_base_box_plot_server <- function(input, output, session){
       {if(input$r_base_box_plot_select_groups == "NULL")
         paste(., 
               paste0("  x = ", input$r_base_box_plot_select_data, "$",
-                     input$r_base_box_plot_select_variable, ","),
+                     input$r_base_box_plot_select_variable),
               sep = "\n")
         else 
           paste(., 
                 paste0("  ", input$r_base_box_plot_select_variable, "~",
                        input$r_base_box_plot_select_groups, ","),
-                paste0("  data = ", input$r_base_box_plot_select_data, ","),
+                paste0("  data = ", input$r_base_box_plot_select_data),
                 sep = "\n")
         } %>% 
-      paste(
-      paste0("  horizontal = ", input$r_base_box_plot_horizontally, ","),
-      sep = "\n"
-      ) %>% 
+      ## Horizontal ##
+      {if(isTRUE(input$r_base_box_plot_horizontally)) 
+        paste(
+          paste0(., ","),
+          paste0("  horizontal = ", input$r_base_box_plot_horizontally), 
+          sep = "\n"
+        ) else .} %>% 
+      ## Color ##
       {if(!is.null(input$r_base_box_plot_color)) 
         paste(
-          ., paste0('  col = ', vector_format(input$r_base_box_plot_color), ','), 
+          paste0(., ","),
+          paste0('  col = ', vector_format(input$r_base_box_plot_color)), 
           sep = "\n"
           ) else .} %>% 
-      paste(
-        paste0('  main = "',       input$r_base_box_plot_title,        '",'  ),
-        paste0('  xlab = "',       input$r_base_box_plot_x_label,      '",'  ),
-        paste0('  ylab = "',       input$r_base_box_plot_y_label,      '"'   ),
-        ")",
-        sep = "\n"
-      )
+      ## Title ##
+      {if(input$r_base_box_plot_title != "")
+        paste(
+          paste0(., ","),  
+          paste0('  main = "', input$r_base_box_plot_title, '"'),
+          sep = "\n"
+        ) else .} %>%
+      ## X label ##
+      {if(input$r_base_box_plot_x_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  xlab = "', input$r_base_box_plot_x_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      ## Y label ##
+      {if(input$r_base_box_plot_y_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  ylab = "', input$r_base_box_plot_y_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      paste(., ")", sep = "\n")
   })
 
   ##### > Render code #####

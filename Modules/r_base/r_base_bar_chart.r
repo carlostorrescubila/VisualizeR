@@ -271,10 +271,17 @@ r_base_bar_chart_server <- function(input, output, session){
       paste0("  summary(",
              input$r_base_bar_chart_select_data, "$", 
              input$r_base_bar_chart_select_variable,
-             ")", ","),
-      paste0("  horiz = ", input$r_base_bar_chart_horizontally),
+             ")"),
       sep = "\n"
       ) %>% 
+      ## Horizontal ##
+      {if(isTRUE(input$r_base_bar_chart_horizontally)) 
+        paste(
+          paste0(., ","),
+          paste0("  horiz = ", input$r_base_bar_chart_horizontally), 
+          sep = "\n"
+        ) else .} %>% 
+      ## Color ##
       {if(!is.null(input$r_base_bar_chart_color)) 
         paste(
           paste0(., ","), 

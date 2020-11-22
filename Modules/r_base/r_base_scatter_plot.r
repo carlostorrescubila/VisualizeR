@@ -77,7 +77,7 @@ r_base_scatter_plot_ui <- function(id) {
           inputId = ns("r_base_scatter_plot_shape"),
           label = "Shape of the points:", 
           choices = 0:25, 
-          selected = "19",
+          selected = "1",
           width = "99%"
         ),
         
@@ -295,51 +295,73 @@ r_base_scatter_plot_server <- function(input, output, session) {
       paste0(
         "  y = ",
         input$r_base_scatter_plot_select_data, "$",
-        input$r_base_scatter_plot_select_variable_y, ","
+        input$r_base_scatter_plot_select_variable_y
       ),
-      paste0('  cex = ', input$r_base_scatter_plot_size, ','),
-      paste0('  col = "', input$r_base_scatter_plot_color, '",'),
-      paste0('  pch = ', input$r_base_scatter_plot_shape, ','), 
       sep = "\n"
     ) %>% 
-      {if(input$r_base_scatter_plot_shape %in% 21:25) 
+      
+      ## Color ##
+      {if(input$r_base_scatter_plot_color != "black")
         paste(
-          ., 
-          paste0('  lwd = "', input$r_base_scatter_plot_lwd, '",'), 
-          paste0('  bg = "', input$r_base_scatter_plot_fill, '",'), 
+          paste0(., ","),
+          paste0('  col = "', input$r_base_scatter_plot_color, '"'),
+          sep = "\n"
+        )
+        else .} %>%
+      
+      ## Size ##
+      {if(input$r_base_scatter_plot_size != 1) 
+        paste(
+          paste0(., ","), 
+          paste0('  cex = ', input$r_base_scatter_plot_size),
           sep = "\n"
         ) 
         else .} %>% 
-      paste(
-        ., 
-        paste0('  main = "', input$r_base_scatter_plot_title, '",'),
-        paste0('  xlab = "', input$r_base_scatter_plot_x_label, '",'),
-        paste0('  ylab = "', input$r_base_scatter_plot_y_label, '"'),
-        ")",
-        sep = "\n"
-      )
+      
+      ## Shape of points ##
+      {if(input$r_base_scatter_plot_shape != 1) 
+        paste(
+          paste0(., ","), 
+          paste0('  pch = ', input$r_base_scatter_plot_shape),
+          sep = "\n"
+        ) 
+        else .} %>% 
+      
+      ## Filled points ##
+      {if(input$r_base_scatter_plot_shape %in% 21:25) 
+        paste(
+          paste0(., ","), 
+          paste0('  lwd = "', input$r_base_scatter_plot_lwd, '",'),
+          paste0('  bg = "', input$r_base_scatter_plot_fill, '"'),
+          sep = "\n"
+        ) 
+        else .} %>% 
+      
+      ## Title ##
+      {if(input$r_base_scatter_plot_title != "")
+        paste(
+          paste0(., ","),  
+          paste0('  main = "', input$r_base_scatter_plot_title, '"'),
+          sep = "\n"
+        ) else .} %>%
+      
+      ## X label ##
+      {if(input$r_base_scatter_plot_x_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  xlab = "', input$r_base_scatter_plot_x_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      
+      ## Y label ##
+      {if(input$r_base_scatter_plot_y_label != "")
+        paste(
+          paste0(., ","), 
+          paste0('  ylab = "', input$r_base_scatter_plot_y_label, '"'),
+          sep = "\n"
+        ) else .} %>%
+      paste(., ")", sep = "\n")
     
-    # paste(
-    #   "plot(",
-    #   paste0(
-    #     "  x = ",
-    #     input$r_base_scatter_plot_select_data, "$",
-    #     input$r_base_scatter_plot_select_variable_x, ","
-    #   ),
-    #   paste0(
-    #     "  y = ",
-    #     input$r_base_scatter_plot_select_data, "$",
-    #     input$r_base_scatter_plot_select_variable_y, ","
-    #   ),
-    #   paste0('  cex = ', input$r_base_scatter_plot_size, ','),
-    #   paste0('  col = "', input$r_base_scatter_plot_color, '",'),
-    #   paste0('  pch = ', input$r_base_scatter_plot_shape, ','),
-    #   paste0('  main = "', input$r_base_scatter_plot_title, '",'),
-    #   paste0('  xlab = "', input$r_base_scatter_plot_x_label, '",'),
-    #   paste0('  ylab = "', input$r_base_scatter_plot_y_label, '"'),
-    #   ")",
-    #   sep = "\n"
-    # )
   })
 
   ##### > Render code #####
