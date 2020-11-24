@@ -58,8 +58,8 @@ r_base_box_plot_ui <- function(id){
         h5(strong("Bars drawn horizontally:")), 
         switchInput(
           inputId = ns("r_base_box_plot_horizontally"),
-          label = img(src = "https://www.flaticon.com/svg/static/icons/svg/64/64728.svg", 
-                      style="width: 50%; height:auto;"),
+          label = img(src = "https://www.flaticon.com/svg/static/icons/svg/425/425115.svg", 
+                      style="width: 50%; height:auto; transform: rotate(270deg) scaleY(-1);"),
           value = FALSE,
           onLabel = "TRUE",
           offLabel = "FALSE",

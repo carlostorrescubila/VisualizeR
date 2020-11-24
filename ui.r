@@ -109,10 +109,16 @@ body <- dashboardBody(
             r_base_bar_chart_ui("r_base_bar_chart_body")
             ), 
         
-        ##### >>> Box-Plot ##############################################################
+        ##### >>> Box-Plot ##################################################################
         tabItem(
             tabName = "r_base_box-plot",
             r_base_box_plot_ui("r_base_box_plot_body")
+        ),
+        
+        ##### >>> Histogram #################################################################
+        tabItem(
+            tabName = "r_base_histogram",
+            r_base_histogram_ui("r_base_histogram_body")
         ),
         
         ##### >>> Scatter plot ##############################################################
