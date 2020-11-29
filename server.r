@@ -1,6 +1,6 @@
 shinyServer(function(input, output, session) {
     
-##### > Message menu ###########################################################################
+##### > Message menu ###############################################################
     
     output$messageMenu <- renderMenu({
         dropdownMenu(
@@ -21,25 +21,21 @@ shinyServer(function(input, output, session) {
         )
     })
     
-##### > Home ############################################################################
+##### > Home #######################################################################
     
     callModule(module = serverChangeTheme, id = "moduleChangeTheme")
     
-##### > Upload data ############################################################################
+##### > Upload data ################################################################
     
-    ##### >> csv ###############################################################################
+    ##### >> csv | txt #############################################################
     
-    callModule(upload_csv_server, "upload_csv")
+    callModule(upload_csv_txt_server, "upload_csv_txt")
     
-    ##### >> txt ###############################################################################
+    ##### >> excel #################################################################
     
-    callModule(upload_csv_server, "upload_txt")
+    # callModule(upload_excel_server, "upload_excel")
     
-    ##### >> excel #############################################################################
-    
-    callModule(upload_csv_server, "upload_excel")
-    
-##### > Edit data ##############################################################################
+##### > Edit data ##################################################################
     
     callModule(edit_data_server, "edit_data_body")
     # ### Update choices in select input data
@@ -58,22 +54,23 @@ shinyServer(function(input, output, session) {
     #         Uploaded_Data[[input$edit_data_select]]
     #         }, 
     #     filter = 'top',
-    #     options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, fixedColumns = TRUE),
+    #     options = list(scrollX = 500, deferRender = TRUE, scroller = TRUE, 
+    #                    fixedColumns = TRUE),
     #     editable = TRUE,
     #     rownames = FALSE) 
 
-##### > R base #################################################################################
+##### > R base #####################################################################
 
-    ##### >> Bar chart #########################################################################
+    ##### >> Bar chart #############################################################
     callModule(r_base_bar_chart_server, "r_base_bar_chart_body")
     
-    ##### >> Bar chart #########################################################################
+    ##### >> Bar chart #############################################################
     callModule(r_base_box_plot_server, "r_base_box_plot_body")
     
-    ##### >> Histogram #########################################################################
+    ##### >> Histogram #############################################################
     callModule(r_base_histogram_server, "r_base_histogram_body")
     
-    ##### >> Scatter plot ######################################################################
+    ##### >> Scatter plot ##########################################################
     callModule(r_base_scatter_plot_server, "r_base_scatter_plot_body")
 
     })
