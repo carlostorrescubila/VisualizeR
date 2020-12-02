@@ -25,7 +25,7 @@ upload_csv_txt_ui <- function(id){
       ##### >> Name of data #####
       column(4, textInput(
         inputId = ns("upload_data_csv_txt_text"),
-        label = h4(strong("Name your data base")),
+        label = h4(strong("Name your database:")),
         value = NULL
         )
       ),
@@ -156,7 +156,7 @@ upload_csv_txt_server <- function(input, output, session){
         label = NULL,
         value = input$upload_data_csv_txt_file$name %>% 
           str_replace(".csv", "") %>% 
-          str_replace(".txt", "")
+          str_replace(".txt", "") 
       )
   })
   
@@ -165,18 +165,18 @@ upload_csv_txt_server <- function(input, output, session){
     
     file <- input$upload_data_csv_txt_file
     
-    ##### > Message of empty file #####
+    ##### >> Message of empty file #####
     if(is.null(file)) {
       sendSweetAlert(
         session = session,
         title = "Failed upload",
-        text = "Select a .csv file",
+        text = "Select a .csv or .txt file",
         type = "error",
         btn_colors = "#3085d6"
       )
     }
     
-    ##### > Message of empty name #####
+    ##### >> Message of empty name #####
     if(input$upload_data_csv_txt_text == ""){
       sendSweetAlert(
         session = session,
@@ -187,7 +187,7 @@ upload_csv_txt_server <- function(input, output, session){
       )
     }
     
-    ##### > Upload file #####
+    ##### >> Upload file #####
     if(!is.null(file) && input$upload_data_csv_txt_text != ""){
       Uploaded_Data[[input$upload_data_csv_txt_text]] <- read.csv(
         file = file$datapath,
@@ -199,7 +199,7 @@ upload_csv_txt_server <- function(input, output, session){
         ) 
     }
     
-    ##### > Show success message #####
+    ##### >> Show success message #####
     if(input$upload_data_csv_txt_text %in% names(Uploaded_Data)){
       sendSweetAlert(
         session = session,

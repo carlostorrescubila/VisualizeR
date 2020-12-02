@@ -1,7 +1,7 @@
 #### > Read data #### ##########################################################################
 
 library(readr)
-
+library(readxl)
 # library(rjson)
 # library(RCurl)
 
@@ -29,6 +29,7 @@ library(clipr)
 
 library(shiny)
 library(shinydashboard)
+# library(shinydashboardPlus)
 library(dashboardthemes)
 library(shinyWidgets)
 library(shinyBS)

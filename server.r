@@ -33,7 +33,7 @@ shinyServer(function(input, output, session) {
     
     ##### >> excel #################################################################
     
-    # callModule(upload_excel_server, "upload_excel")
+    callModule(upload_excel_server, "upload_excel")
     
 ##### > Edit data ##################################################################
     
