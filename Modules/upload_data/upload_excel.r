@@ -8,7 +8,7 @@ upload_excel_ui <- function(id){
     
     ##### > Title #####
     h2(
-      strong("Here you can upload your data to visualize in an excel format"),
+      strong("Here you can upload your data to visualize in an Excel format"),
       class = "text-center"
     ), 
     
@@ -107,7 +107,6 @@ upload_excel_ui <- function(id){
     
   )
     
-  
 }
 
 ##### Server ##########################################################################

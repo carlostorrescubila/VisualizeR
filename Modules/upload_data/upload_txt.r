@@ -137,7 +137,7 @@ upload_txt_server <- function(input, output, session){
     expr = {
       file <- input$upload_data_txt_file
       if(!is.null(file)){
-        read.csv(
+        read.delim(
           file = file$datapath,
           header = input$upload_data_txt_first_row,
           sep = if_else(condition = {input$upload_data_txt_delimiter == "other"}, 
@@ -178,7 +178,7 @@ upload_txt_server <- function(input, output, session){
       sendSweetAlert(
         session = session,
         title = "Failed upload",
-        text = "Select a .csv or .txt file",
+        text = "Select a txt file",
         type = "error",
         btn_colors = "#3085d6"
       )
@@ -197,7 +197,7 @@ upload_txt_server <- function(input, output, session){
     
     ##### >> Upload file #####
     if(!is.null(file) && input$upload_data_txt_text != ""){
-      Uploaded_Data[[input$upload_data_txt_text]] <- read.csv(
+      Uploaded_Data[[input$upload_data_txt_text]] <- read.delim(
         file = file$datapath,
         header = input$upload_data_txt_first_row,
         sep = if_else(condition = {input$upload_data_txt_delimiter == "other"}, 

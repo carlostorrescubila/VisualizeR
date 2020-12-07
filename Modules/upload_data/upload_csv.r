@@ -194,7 +194,7 @@ upload_csv_server <- function(input, output, session){
       sendSweetAlert(
         session = session,
         title = "Failed upload",
-        text = "Select a .csv or .txt file",
+        text = "Select a .csv file",
         type = "error",
         btn_colors = "#3085d6"
       )
