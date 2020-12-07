@@ -76,7 +76,7 @@ upload_excel_ui <- function(id){
       ##### >> NA #####
       column(4, textInput(
         inputId = ns("upload_data_excel_na"),
-        label = h4(strong("Interpret as missing values:")),
+        label = h4(strong("Consider as missing values:")),
         value = NULL
       ))
       
@@ -98,7 +98,7 @@ upload_excel_ui <- function(id){
     ##### > Upload data button #####
     actionBttn(
       inputId = ns("upload_data_excel_confirm"),
-      label = "Upload to VisualizeR",
+      label = "Upload data",
       style = "bordered",
       color = "primary",
       size = "lg",

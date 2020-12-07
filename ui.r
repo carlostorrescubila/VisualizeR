@@ -1,7 +1,3 @@
-##### Global #####################################################################
-
-# source("./global.r", encoding = "UTF-8")
-
 ##### > Header ###################################################################
 
 header <- dashboardHeader(
@@ -22,6 +18,8 @@ source("./Modules/sidebar.r", encoding = "UTF-8")
 ##### > Body #####################################################################
 
 body <- dashboardBody(
+    
+    tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
     
     ##### >> Set Theme ###########################################################
     shinyDashboardThemes(
@@ -49,18 +47,45 @@ body <- dashboardBody(
                     tabsetPanel(
                         type = "tabs",
 
-                        ##### >>> csv/txt ########################################
+                        ##### >>> txt ########################################
 
                         tabPanel(
-                            "csv | txt",
-                            upload_csv_txt_ui("upload_csv_txt")
+                            title = div(
+                                img(src = "https://www.flaticon.com/svg/static/icons/svg/337/337956.svg", width = "32px"),
+                                "txt"
+                                ),
+                            upload_txt_ui("upload_txt")
                             ),
+                        
+                        ##### >>> csv ########################################
+                        
+                        tabPanel(
+                            title = div(
+                                img(src = "https://www.flaticon.com/svg/static/icons/svg/180/180855.svg", width = "32px"),
+                                "csv"
+                            ),
+                            upload_csv_ui("upload_csv")
+                        ),
                         
                         ##### >>> excel ##########################################
                         
                         tabPanel(
-                            "excel",
+                            title = div(
+                                img(src = "https://www.flaticon.com/svg/static/icons/svg/732/732220.svg", width = "32px"), 
+                                "Excel"
+                                ),
                             upload_excel_ui("upload_excel")
+                        ), 
+                        
+                        ##### >>> SPSS ##########################################
+                        
+                        tabPanel( 
+                            title = div(
+                                # img(src = "https://simpleicons.org/icons/ibm.svg")
+                                img(src = "https://www.flaticon.com/svg/static/icons/svg/882/882625.svg", width = "32px"), 
+                                "SPSS"
+                                ), 
+                        upload_spss_ui("upload_spss")
                         )
                     )
                 )

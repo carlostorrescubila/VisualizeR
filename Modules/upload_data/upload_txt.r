@@ -1,6 +1,6 @@
 ##### UI ###########################################################################
 
-upload_csv_txt_ui <- function(id){
+upload_txt_ui <- function(id){
   
   ns <- NS(id)
   
@@ -8,15 +8,15 @@ upload_csv_txt_ui <- function(id){
     
     ##### > Title #####
     h2(
-      strong("Here you can upload your data to visualize in format csv or txt"),
+      strong("Here you can upload your data to visualize in txt format"),
       class = "text-center"
     ),
     
     ##### > Select file #####
     fileInput(
-      inputId = ns("upload_data_csv_txt_file"),
+      inputId = ns("upload_data_txt_file"),
       label = h4(strong("Select file to upload")),
-      accept = c('.csv', '.txt')
+      accept = '.txt'
     ),
     
     ##### > Select options #####
@@ -24,7 +24,7 @@ upload_csv_txt_ui <- function(id){
       
       ##### >> Name of data #####
       column(4, textInput(
-        inputId = ns("upload_data_csv_txt_text"),
+        inputId = ns("upload_data_txt_text"),
         label = h4(strong("Name your database:")),
         value = NULL
         )
@@ -32,20 +32,20 @@ upload_csv_txt_ui <- function(id){
       
       ##### >> Select separator #####
       column(4, pickerInput(
-        inputId = ns("upload_data_csv_txt_delimiter"),
+        inputId = ns("upload_data_txt_delimiter"),
         label = h4(strong("Delimiter:")),
         choices = c(
-          "comma" = ",",
-          "semicolon" = ";",
-          "tab" = "\t", 
-          "other" = "other"
+          "Tab" = "\t", 
+          "Comma" = ",",
+          "Semicolon" = ";",
+          "Other" = "other"
           )
       )),
       
       ##### >> Fill NA #####
       column(4, pickerInput(
-        inputId = ns("upload_data_csv_txt_na"),
-        label = h4(strong("Fill missing values as:")),
+        inputId = ns("upload_data_txt_na"),
+        label = h4(strong("Consider as missing values:")),
         choices = c(
           "NA",
           "null",
@@ -62,7 +62,7 @@ upload_csv_txt_ui <- function(id){
       
       ##### >> Checkbox for row names #####
       column(4, awesomeCheckbox(
-        inputId = ns("upload_data_csv_txt_first_row"),
+        inputId = ns("upload_data_txt_first_row"),
         label = h4(strong("First row as colnames")),
         value = TRUE,
         status = "success"
@@ -70,22 +70,29 @@ upload_csv_txt_ui <- function(id){
       
       ##### >> Other delimiter #####
       disabled(column(4, textInput(
-        inputId = ns("upload_data_csv_txt_other_delim"),
+        inputId = ns("upload_data_txt_other_delim"),
         label = h4(strong("Write your special delimiter")),
         value = NULL
-      )))
+      ))), 
+      
+      ##### >> Decimal points #####
+      column(4, pickerInput(
+        inputId = ns("upload_data_txt_dec"),
+        label = h4(strong("Consider as decimal points:")),
+        choices = NULL
+      ))
       
     ),
     
     ##### > Show data #####
-    dataTableOutput(ns("upload_data_csv_txt_table")),
+    dataTableOutput(ns("upload_data_txt_table")),
     
     br(),
     
     ##### > Upload data button #####
     actionBttn(
-      inputId = ns("upload_data_csv_txt_confirm"),
-      label = "Upload to VisualizeR",
+      inputId = ns("upload_data_txt_confirm"),
+      label = "Upload data",
       style = "bordered",
       color = "primary",
       size = "lg",
@@ -98,44 +105,46 @@ upload_csv_txt_ui <- function(id){
 
 ##### Server ######################################################################
 
-upload_csv_txt_server <- function(input, output, session){
+upload_txt_server <- function(input, output, session){
   
-  ##### > Update delimiter #####
-  observe({
-    req(input$upload_data_csv_txt_file)
-    updatePickerInput(
-      session,
-      'upload_data_csv_txt_delimiter',
-      label = NULL,
-      selected = if_else(
-        condition = str_ends(string = input$upload_data_csv_txt_file$name, 
-                             pattern = ".csv"),
-        true = ",", 
-        false = "\t"
-      )
+  ##### > Enable other delim #####
+  observeEvent(input$upload_data_txt_delimiter, {
+    toggleState(
+      id = "upload_data_txt_other_delim",
+      condition = input$upload_data_txt_delimiter == "other"
     )
   })
   
-  ##### > Enable other delim #####
-  observeEvent(input$upload_data_csv_txt_delimiter, {
-    toggleState(
-      id = "upload_data_csv_txt_other_delim",
-      condition = input$upload_data_csv_txt_delimiter == "other"
-    )
+  ##### > Update decimal points #####
+  observe({
+    if(input$upload_data_txt_delimiter == ","){
+      updatePickerInput(
+        session,
+        inputId = 'upload_data_txt_dec',
+        choices = c("Dot" = ".")
+      )
+    } else {
+      updatePickerInput(
+        session,
+        inputId = 'upload_data_txt_dec',
+        choices = c("Dot" = ".", "Comma" = ",")
+      )
+    }
   })
   
   ##### > Show data #####
-  output$upload_data_csv_txt_table <- DT::renderDataTable(
+  output$upload_data_txt_table <- DT::renderDataTable(
     expr = {
-      file <- input$upload_data_csv_txt_file
+      file <- input$upload_data_txt_file
       if(!is.null(file)){
         read.csv(
           file = file$datapath,
-          header = input$upload_data_csv_txt_first_row,
-          sep = if_else(condition = {input$upload_data_csv_txt_delimiter == "other"}, 
-                        true = input$upload_data_csv_txt_other_delim, 
-                        false = input$upload_data_csv_txt_delimiter), 
-          na = input$upload_data_csv_txt_na
+          header = input$upload_data_txt_first_row,
+          sep = if_else(condition = {input$upload_data_txt_delimiter == "other"}, 
+                        true = input$upload_data_txt_other_delim, 
+                        false = input$upload_data_txt_delimiter), 
+          dec = input$upload_data_txt_dec,
+          na = input$upload_data_txt_na
         )
       }
     },
@@ -152,18 +161,17 @@ upload_csv_txt_server <- function(input, output, session){
   observe({
       updateTextInput(
         session,
-        'upload_data_csv_txt_text',
+        'upload_data_txt_text',
         label = NULL,
-        value = input$upload_data_csv_txt_file$name %>% 
-          str_replace(".csv", "") %>% 
+        value = input$upload_data_txt_file$name %>% 
           str_replace(".txt", "") 
       )
   })
   
   ##### > Upload data button actions #####
-  observeEvent(input$upload_data_csv_txt_confirm, {
+  observeEvent(input$upload_data_txt_confirm, {
     
-    file <- input$upload_data_csv_txt_file
+    file <- input$upload_data_txt_file
     
     ##### >> Message of empty file #####
     if(is.null(file)) {
@@ -177,7 +185,7 @@ upload_csv_txt_server <- function(input, output, session){
     }
     
     ##### >> Message of empty name #####
-    if(input$upload_data_csv_txt_text == ""){
+    if(input$upload_data_txt_text == ""){
       sendSweetAlert(
         session = session,
         title = "Failed upload",
@@ -188,24 +196,25 @@ upload_csv_txt_server <- function(input, output, session){
     }
     
     ##### >> Upload file #####
-    if(!is.null(file) && input$upload_data_csv_txt_text != ""){
-      Uploaded_Data[[input$upload_data_csv_txt_text]] <- read.csv(
+    if(!is.null(file) && input$upload_data_txt_text != ""){
+      Uploaded_Data[[input$upload_data_txt_text]] <- read.csv(
         file = file$datapath,
-        header = input$upload_data_csv_txt_first_row,
-        sep = if_else(condition = {input$upload_data_csv_txt_delimiter == "other"}, 
-                      true = input$upload_data_csv_txt_other_delim, 
-                      false = input$upload_data_csv_txt_delimiter),
-        na = input$upload_data_csv_txt_na
+        header = input$upload_data_txt_first_row,
+        sep = if_else(condition = {input$upload_data_txt_delimiter == "other"}, 
+                      true = input$upload_data_txt_other_delim, 
+                      false = input$upload_data_txt_delimiter),
+        dec = input$upload_data_txt_dec, 
+        na = input$upload_data_txt_na
         ) 
     }
     
     ##### >> Show success message #####
-    if(input$upload_data_csv_txt_text %in% names(Uploaded_Data)){
+    if(input$upload_data_txt_text %in% names(Uploaded_Data)){
       sendSweetAlert(
         session = session,
         title = "Done!",
         text = paste0('Your data "', 
-                      input$upload_data_csv_txt_text, 
+                      input$upload_data_txt_text, 
                       '" have been uploaded'),
         type = "success"
       )

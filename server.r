@@ -27,13 +27,21 @@ shinyServer(function(input, output, session) {
     
 ##### > Upload data ################################################################
     
-    ##### >> csv | txt #############################################################
+    ##### >> txt ###################################################################
     
-    callModule(upload_csv_txt_server, "upload_csv_txt")
+    callModule(upload_txt_server, "upload_txt")
+    
+    ##### >> csv ###################################################################
+    
+    callModule(upload_csv_server, "upload_csv")
     
     ##### >> excel #################################################################
     
     callModule(upload_excel_server, "upload_excel")
+    
+    ##### >> SPSS #################################################################
+    
+    callModule(upload_spss_server, "upload_spss")
     
 ##### > Edit data ##################################################################
     

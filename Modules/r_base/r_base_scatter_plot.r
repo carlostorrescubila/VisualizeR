@@ -167,9 +167,6 @@ r_base_scatter_plot_ui <- function(id) {
 ##### Server ######################################################################
 
 r_base_scatter_plot_server <- function(input, output, session) {
-  output$message <- renderText({
-    code("TRUE", class = "language-r")
-  })
 
   ##### > Update data choices #####
   observe({
