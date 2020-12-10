@@ -1,7 +1,7 @@
 sidebar <- dashboardSidebar(
   disable = F,
   # width = 275,
-  collapsed = F, 
+  collapsed = F,
   sidebarMenu(
     menuItem("Home", tabName = "home", icon = icon("home")),
     menuItem("Upload Data", tabName = "upload_data", icon = icon("file-upload")), 
@@ -23,6 +23,3 @@ sidebar <- dashboardSidebar(
              )
   )
 )
-
-
-

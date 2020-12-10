@@ -23,7 +23,8 @@ shinyServer(function(input, output, session) {
     
 ##### > Home #######################################################################
     
-    callModule(module = serverChangeTheme, id = "moduleChangeTheme")
+    callModule(serverChangeTheme, "moduleChangeTheme")
+    callModule(home_server, "home_body")
     
 ##### > Upload data ################################################################
     

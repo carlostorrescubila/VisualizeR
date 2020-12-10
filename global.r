@@ -1,12 +1,13 @@
 ##### > Libraries #################################################################
 
-source("./Code/libraries.r", encoding = "UTF-8")
+source("libraries.r", encoding = "UTF-8")
 
-##### > Functions #################################################################
+##### > Functionalities #################################################################
 
 list.files("./Code") %>% 
-  paste0("./Code/", .) %>% 
-  # str_remove_all("libraries.r")
+  str_remove("logo_maker.r") %>%
+  stri_remove_empty() %>% 
+  paste0("./Code/", .) %>%
   sapply(source)
 
 ### > Side bar menu sub items #####################################################
@@ -25,10 +26,6 @@ list.files("./Code") %>%
 #       list.dirs() %>% list.files()
 #   }
 #   )
-
-##### > Data ######################################################################
-
-Uploaded_Data <- reactiveValues()
 
 ##### > Alerts ####################################################################
 

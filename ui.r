@@ -1,12 +1,12 @@
 ##### > Header ###################################################################
 
-header <- dashboardHeader(
-    title = "VisualizeR", 
-    #     tagList(
-    #     tags$span(class = "logo-mini", ""),
-    #     tags$span(class = "logo-lg", "Covid-19 en Castilla y León")
-    # ), 
-    # titleWidth = 275,
+header <- dashboardHeaderPlus(
+    title = tagList(
+        tags$span(class = "logo-mini", ""),
+        tags$span(class = "logo-lg", div(class = "VisualizeR", "VisualizeR", style = "font-size: 25px;"))
+        ),
+    # enable_rightsidebar = TRUE,
+    # rightSidebarIcon = "paint-brush",
     dropdownMenuOutput(outputId = "Customize_Menu"),
     dropdownMenuOutput(outputId = "messageMenu")
 )
@@ -15,10 +15,22 @@ header <- dashboardHeader(
 
 source("./Modules/sidebar.r", encoding = "UTF-8")
 
+# rightsidebar <- rightSidebar(
+#     background = "dark",
+#     rightSidebarTabContent(
+#         id = 1,
+#         title = "Tab 1",
+#         icon = "desktop",
+#         active = TRUE,
+#         uiChangeThemeDropdown()
+#     )
+# )
+
 ##### > Body #####################################################################
 
 body <- dashboardBody(
     
+    includeCSS("styles.css"),
     tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
     
     ##### >> Set Theme ###########################################################
@@ -34,7 +46,7 @@ body <- dashboardBody(
             tabName = "home",
             fluidRow(column(
                 width = 12,
-                uiChangeThemeDropdown()
+                home_ui("home_body")
             ))
         ),
 
@@ -153,9 +165,10 @@ body <- dashboardBody(
 #### UI ##########################################################################
 
 ui <- div(
-    dashboardPage(
+    dashboardPagePlus(
         header,
         sidebar,
-        body
+        body#, 
+        # rightsidebar
     )
 )
