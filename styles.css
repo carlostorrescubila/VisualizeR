@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+/* Dashboard title */
+.VisualizeR {
+  font-family: 'Lobster', cursive;
+  font-size: 24px;
+  display: inline-block;
+}
+
+/* Dashboard logo in Home */
+.Logo {
+  float:right; 
+  margin: -45px 25px;
+  width: 15%;
+}
+
+/* Headings 3 */
+h2{
+  margin: 10px 25px 0 25px;  
+}
+
+/* Paragraphs */
+p{
+  font-family: Arial;
+  font-size: 20px;
+  text-align: justify;
+  margin: 10px 20px 0 20px; 
+}
+
+/* Choose theme picker input */
+.Theme_changer{
+  margin: -15px 0 0 20px;
+}
