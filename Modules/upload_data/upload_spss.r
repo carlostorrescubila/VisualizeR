@@ -4,11 +4,14 @@ upload_spss_ui <- function(id){
   
   fluidPage(
     
+    br(),
+    
     ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in SPSS format"),
       class = "text-center"
-    ), 
+    ),
+    br(),
     
     ##### > Select file #####
     fileInput(
@@ -119,7 +122,7 @@ upload_spss_server <- function(input, output, session){
       sendSweetAlert(
         session = session,
         title = "Failed upload",
-        text = "Select a .spss file",
+        text = "Select a .sav file",
         type = "error",
         btn_colors = "#3085d6"
       )

@@ -30,9 +30,15 @@ source("./Modules/sidebar.r", encoding = "UTF-8")
 
 body <- dashboardBody(
     
+    #### >> Metadata ##############################################################
+    tags$head(
+        tags$meta(charset = "UTF-8"), 
+        tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
+        tags$meta(name = "description", content = "Shiny app to visualize data"), 
+        tags$meta(name = "keywords", content = "R, Plots, Visualize"),
+    ),
     includeCSS("styles.css"),
-    tags$meta(name = "viewport", content = "width=device-width, initial-scale=1.0"),
-    
+
     ##### >> Set Theme ###########################################################
     shinyDashboardThemes(
         theme = "grey_light"
@@ -100,7 +106,9 @@ body <- dashboardBody(
                         upload_spss_ui("upload_spss")
                         )
                     )
-                )
+                )#, 
+                ##### > Footer #####
+                # footer <- tags$div(p(class = "footer", "By: Carlos A. Torres Cubilla"))
             )
         ),
 
@@ -158,7 +166,7 @@ body <- dashboardBody(
         )
     
     )
-
+    
 )
 
 

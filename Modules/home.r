@@ -51,7 +51,7 @@ home_ui <- function(id){
         title = "Step 2: edit your data",
         icon = "edit",
         color = "blue",
-        "Edit your data..."
+        "If required, edit the data types of the columns"
         ),
       timelineItem(
         title = "Step 3: visualize",
@@ -59,7 +59,10 @@ home_ui <- function(id){
         color = "blue",
         "Visualize your data using the different plots available"
       )
-    )
+    )#, 
+    
+    ##### > Footer #####
+    # footer <- tags$div(p(class = "footer", "By: Carlos A. Torres Cubilla"))
     
   )
   

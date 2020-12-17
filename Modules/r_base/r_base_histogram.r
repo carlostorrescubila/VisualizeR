@@ -393,20 +393,20 @@ r_base_histogram_server <- function(input, output, session){
         )
     }
   })
-
+  
   ##### > Code #####
   Text_Data <- reactive({
     {if(input$r_base_histogram_select_groups == "NULL")
       paste("hist(",
-            paste0("  x = ", input$r_base_histogram_select_data, "$", 
+            paste0("  x = ", input$r_base_histogram_select_data, "$",
                    input$r_base_histogram_select_variable),
             sep = "\n")
       else
         paste("library(FSA)",
               "## This package let you use a formula in hist function masking the function hist.formula", "",
               "hist(",
-              paste0("  formula = ", 
-                     input$r_base_histogram_select_variable, "~", 
+              paste0("  formula = ",
+                     input$r_base_histogram_select_variable, "~",
                      input$r_base_histogram_select_groups, ","),
               paste0("  data = ", input$r_base_histogram_select_data),
               sep = "\n")

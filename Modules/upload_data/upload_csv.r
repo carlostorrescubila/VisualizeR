@@ -6,11 +6,14 @@ upload_csv_ui <- function(id){
   
   fluidPage(
     
+    br(),
+    
     ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in csv format"),
       class = "text-center"
     ),
+    br(), 
     
     ##### > Select file #####
     fileInput(

@@ -31,3 +31,21 @@ p{
 .Theme_changer{
   margin: -15px 0 0 20px;
 }
+
+/* Choose theme picker input */
+.Data_Selecter{
+  margin: -15px 0 0 20px;
+}
+
+.footer{
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: transparent;
+  text-align: left;
+  font-size: 15px;
+  margin: 0 0 0 20px;
+  z-index:900;
+}
+
+

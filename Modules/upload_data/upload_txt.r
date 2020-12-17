@@ -6,11 +6,14 @@ upload_txt_ui <- function(id){
   
   fluidPage(
     
+    br(),
+    
     ##### > Title #####
     h2(
       strong("Here you can upload your data to visualize in txt format"),
       class = "text-center"
     ),
+    br(),
     
     ##### > Select file #####
     fileInput(
