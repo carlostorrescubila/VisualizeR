@@ -20,6 +20,21 @@ sidebar <- dashboardSidebar(
                    )
                  }
                )
+             ), 
+    menuItem("Lattice", tabName = "lattice", icon = icon("r-project", class = "lattice_icon"), 
+             list.files("./Modules/lattice") %>% 
+               str_remove_all(pattern = "\\.r") %>% 
+               purrr::map(
+                 function(x) {
+                   menuSubItem(
+                     text = x %>% 
+                       str_remove(pattern = "lattice_") %>% 
+                       str_replace(pattern = "_", replacement = " ") %>% 
+                       str_to_title(), 
+                     tabName = x
+                   )
+                 }
+               )
              )
+    )
   )
-)

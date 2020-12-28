@@ -333,6 +333,7 @@ r_base_box_plot_server <- function(input, output, session){
                 paste0("  data = ", input$r_base_box_plot_select_data),
                 sep = "\n")
         } %>% 
+      
       ## Horizontal ##
       {if(isTRUE(input$r_base_box_plot_horizontally)) 
         paste(
@@ -340,6 +341,7 @@ r_base_box_plot_server <- function(input, output, session){
           paste0("  horizontal = ", input$r_base_box_plot_horizontally), 
           sep = "\n"
         ) else .} %>% 
+      
       ## Color ##
       {if(!is.null(input$r_base_box_plot_color)) 
         paste(
@@ -347,6 +349,7 @@ r_base_box_plot_server <- function(input, output, session){
           paste0('  col = ', vector_format(input$r_base_box_plot_color)), 
           sep = "\n"
           ) else .} %>% 
+      
       ## Title ##
       {if(input$r_base_box_plot_title != "")
         paste(
@@ -354,6 +357,7 @@ r_base_box_plot_server <- function(input, output, session){
           paste0('  main = "', input$r_base_box_plot_title, '"'),
           sep = "\n"
         ) else .} %>%
+      
       ## X label ##
       {if(input$r_base_box_plot_x_label != "")
         paste(
@@ -361,6 +365,7 @@ r_base_box_plot_server <- function(input, output, session){
           paste0('  xlab = "', input$r_base_box_plot_x_label, '"'),
           sep = "\n"
         ) else .} %>%
+      
       ## Y label ##
       {if(input$r_base_box_plot_y_label != "")
         paste(

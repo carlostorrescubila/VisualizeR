@@ -48,3 +48,8 @@ list.files("./Modules/upload_data") %>%
 list.files("./Modules/r_base") %>% 
   paste0("./Modules/r_base/", .) %>% 
   sapply(source)
+
+### R base ###
+list.files("./Modules/lattice") %>% 
+  paste0("./Modules/lattice/", .) %>% 
+  sapply(source)

@@ -65,6 +65,16 @@ shinyServer(function(input, output, session) {
     ##### >> Scatter plot ##########################################################
     
     callModule(r_base_scatter_plot_server, "r_base_scatter_plot_body")
-
+    
+##### > Lattice ####################################################################
+    
+    ##### >> Bar chart #############################################################
+    
+    callModule(lattice_bar_chart_server, "lattice_bar_chart_body")
+    
+    ##### >> Scatter plot ##########################################################
+    
+    callModule(lattice_scatter_plot_server, "lattice_scatter_plot_body")
+    
     })
     

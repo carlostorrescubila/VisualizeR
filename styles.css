@@ -9,9 +9,9 @@
 
 /* Dashboard logo in Home */
 .Logo {
-  float:right; 
-  margin: -45px 25px;
-  width: 15%;
+  float: right;
+  padding: 0 20px;
+  width: 20%;
 }
 
 /* Headings 3 */
@@ -35,6 +35,10 @@ p{
 /* Choose theme picker input */
 .Data_Selecter{
   margin: -15px 0 0 20px;
+}
+
+.lattice_icon{
+  color: #F1C40F;
 }
 
 .footer{

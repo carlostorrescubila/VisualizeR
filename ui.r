@@ -106,9 +106,7 @@ body <- dashboardBody(
                         upload_spss_ui("upload_spss")
                         )
                     )
-                )#, 
-                ##### > Footer #####
-                # footer <- tags$div(p(class = "footer", "By: Carlos A. Torres Cubilla"))
+                )
             )
         ),
 
@@ -141,28 +139,42 @@ body <- dashboardBody(
         # )
         # )
     
-        ##### >>> Bar chart ######################################################
+        ##### >>> Bar chart 
         tabItem(
             tabName = "r_base_bar_chart",
             r_base_bar_chart_ui("r_base_bar_chart_body")
             ), 
         
-        ##### >>> Box-Plot #######################################################
+        ##### >>> Box-Plot 
         tabItem(
             tabName = "r_base_box-plot",
             r_base_box_plot_ui("r_base_box_plot_body")
         ),
         
-        ##### >>> Histogram ######################################################
+        ##### >>> Histogram 
         tabItem(
             tabName = "r_base_histogram",
             r_base_histogram_ui("r_base_histogram_body")
         ),
         
-        ##### >>> Scatter plot ###################################################
+        ##### >>> Scatter plot 
         tabItem(
             tabName = "r_base_scatter_plot",
             r_base_scatter_plot_ui("r_base_scatter_plot_body")
+        ), 
+        
+        ##### >> lattice ##########################################################
+        
+        ##### >>> Bar chart 
+        tabItem(
+            tabName = "lattice_bar_chart", 
+            lattice_bar_chart_ui("lattice_bar_chart_body")
+        ),
+        
+        ##### >>> Scatter plot
+        tabItem(
+            tabName = "lattice_scatter_plot", 
+            lattice_scatter_plot_ui("lattice_scatter_plot_body")
         )
     
     )
